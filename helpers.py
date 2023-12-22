@@ -38,7 +38,7 @@ def safe_rmtree(path, retries=2, delay=1):
     :param retries: 删除操作的重试次数。
     :param delay: 重试前的等待时间（秒）。
     """
-    while retries > 0:
+    while retries > 0 and os.path.exists(path):
         try:
             shutil.rmtree(path)
             break
@@ -46,5 +46,6 @@ def safe_rmtree(path, retries=2, delay=1):
             print(f"Error deleting {path}: {e}. Retrying in {delay} seconds...")
             time.sleep(delay)
             retries -= 1
-            if retries == 0:
-                print(f"Failed to delete {path} after several attempts.")
+
+    if retries == 0 and os.path.exists(path):
+        print(f"Failed to delete {path} after several attempts.")
