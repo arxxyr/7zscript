@@ -20,10 +20,14 @@ class FileExtractor:
         except subprocess.CalledProcessError:
             return False
 
-    def try_extract(self, file_path, password):
-        command = ["7z", "x", f"-p{password}", "-aoa", f"-o{self.tmp_folder}", file_path]
-        try:
-            subprocess.run(command, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            return True
-        except subprocess.CalledProcessError:
-            return False
+    def try_extract(self, file_path):
+        for password in self.passwords:
+            command = ["7z", "x", f"-p{password}", "-aoa", f"-o{self.tmp_folder}", file_path]
+            try:
+                result = subprocess.run(command, check=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                if "Everything is Ok" in result.stdout:
+                    print(f"Extracted {file_path} with password: {password}")
+                    return True
+            except subprocess.CalledProcessError:
+                continue
+        return False
