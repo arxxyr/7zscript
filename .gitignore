@@ -1,0 +1,17 @@
+# 字节码文件
+__pycache__/
+*.pyc
+
+# 日志和数据文件
+*.log
+*.csv
+*.json
+
+# 操作系统文件
+.DS_Store
+
+# 临时文件
+tmp/
+
+# python env
+venv/
